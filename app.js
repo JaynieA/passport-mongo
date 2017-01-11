@@ -1,8 +1,10 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var session = require('express-session');
 //require passport strategy (our own added emthods/strategies)
 var passport = require( './strategies/userStrategy' );
+
 
 //require routers
 var indexRouter = require('./routes/index');
@@ -14,8 +16,19 @@ var app = express();
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
-//use the passport required above
+//create session and tell app to use it
+app.use(session({
+  secret: 'my secret',
+  key: 'user',
+  resave: true,
+  saveUninitialized: false,
+  cookie: {masage: 600000000, secure: false}
+})); // end use session
+
+//passport setup
 app.use(passport.initialize());
+//link passport to the session we created
+app.use(passport.session());
 
 // routers
 app.use('/', indexRouter);

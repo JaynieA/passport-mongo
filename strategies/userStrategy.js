@@ -33,10 +33,19 @@ passport.use('local', new LocalStrategy({ //this LocalStragety object takes: //h
     } // end else
   }); // end findOne
 
+  //serialization gets called on initial request to validate 
   passport.serializeUser(function(user, done) {
     console.log('serialize user');
     done(null, user.id);
   }); // end serializeUser
+
+  //gets the id out of the cookie that was sent. gets called on every subsequent request after login
+  passport.deserializeUser(function(id, done) {
+    console.log('deserialize user');
+    User.findById(id, function(err, userFound) {
+      done(null, userFound);
+    }); // end findById
+  }); // end deserializeUser
 
 
 })); // end use passport

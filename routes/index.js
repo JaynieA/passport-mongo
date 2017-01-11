@@ -16,4 +16,12 @@ router.post('/', passport.authenticate('local') ,function(req,res) {
   //not reflected here: if authentication is not accepted, it will return a 401
 }); // end post
 
+router.get('/test', function(req,res) { //to test this, in the browser just go to .../test bc there is no client side yet
+  console.log('hit test route');
+  console.log('req.user-->', req.user);//if deserialize works, req.user should be the user object
+  console.log('req.session-->',req.session); //larger object than one above that we can also get
+  console.log('is authed?',req.isAuthenticated());
+  res.sendStatus(200);
+});
+
 module.exports = router;
