@@ -6,19 +6,19 @@
     <script src="./scripts/script.js" charset="utf-8"></script>
     <link rel="stylesheet" href="./styles/style.css">
   </head>
-    <body ng-app="myApp">
+    <body ng-app="myApp" ng-controller="mainController">
       <h1>Passport Login</h1>
       <form>
         <div>
           <label for="username">Username:</label>
-          <input type="text" name="username" id="username"/>
+          <input ng-model="username" type="text" name="username" id="username"/>
         </div>
         <div>
           <label for="password">Password:</label>
-          <input type="password" name="password" id="password"/>
+          <input ng-model="password" type="password" name="password" id="password"/>
         </div>
         <div>
-          <input type="submit" value="Log In"/>
+          <input ng-click="login()" type="submit" value="Log In"/>
           <a href="/register">Register</a>
         </div>
       </form>

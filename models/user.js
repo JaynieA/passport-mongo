@@ -30,8 +30,7 @@ UserSchema.pre('save', function(next) {
     bcrypt.hash(user.password, salt, function(err, hash) { //returns the hash
       //overwrite the given user password with the hash
       user.password = hash;
-
-      console.log(hash, user);
+      //pre expexts you to return next out of the function
       next();
     }); // end hash
   }); // end genSalt

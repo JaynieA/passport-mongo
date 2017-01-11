@@ -1,6 +1,8 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+//require passport strategy (our own added emthods/strategies)
+var passport = require( './strategies/userStrategy' );
 
 //require routers
 var indexRouter = require('./routes/index');
@@ -11,6 +13,9 @@ var app = express();
 // middleware
 app.use(bodyParser.json());
 app.use(express.static('public'));
+
+//use the passport required above
+app.use(passport.initialize());
 
 // routers
 app.use('/', indexRouter);
