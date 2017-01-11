@@ -36,6 +36,13 @@ UserSchema.pre('save', function(next) {
   }); // end genSalt
 }); // end pre
 
+//attach a function to the schema
+UserSchema.methods.comparePassword = function(attemptedPassword, callback) {
+  bcrypt.compare(attemptedPassword, this.password, function(err, isMatch) {
+      callback(isMatch); // this is coming back from our call to bcrypt 
+  }); // end compare
+}; // end comparePassword
+
 //save and export the model
 var User = mongoose.model('users', UserSchema);
 

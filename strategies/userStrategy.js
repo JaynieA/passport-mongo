@@ -1,14 +1,43 @@
 var passport = require('passport');
 //define local strategy (local authentication)
 var LocalStrategy = require('passport-local').Strategy;
+//pull in our model
+var User = require('../models/user');
 
 passport.use('local', new LocalStrategy({ //this LocalStragety object takes: //here is where you can configure other stuff for email input, etc
   passReqToCallback: true
-}, function(req, username, password, done){ // the username comes from the client
+}, function(req, username, attemptedPassword, done){ // the username comes from the client
   console.log('hit local stretegy');
-  
   //look up our user
-  //compare the givenPassword to the hashed/salted password in db
+  User.findOne({username: username}, function(err, foundUser) { //again, referencing username given to us by client
+    if (!foundUser) { // username doesn't exist
+    console.log('no user');
+      //done comes from line 9
+      done(null, false, {message:'Incorrect credentials'}); //send error to user
+    } else {
+        //compare the givenPassword to the hashed/salted password in db
+        //pass the found user back
+        console.log('found user');
+
+        foundUser.comparePassword(attemptedPassword, function(isMatch) { //this function is what gets called in the callback in user.js line 40ish
+          if (isMatch) {
+            console.log('matched password');
+            //we found the user- password is valid and matches
+            done(null, foundUser, {message: 'Login successed!'});
+          } else {
+            //
+            console.log('didnt match password');
+            done(mull, false, {message: 'Incorrect credentials'});
+          }
+        });
+    } // end else
+  }); // end findOne
+
+  passport.serializeUser(function(user, done) {
+    console.log('serialize user');
+    done(null, user.id);
+  }); // end serializeUser
+
 
 })); // end use passport
 
